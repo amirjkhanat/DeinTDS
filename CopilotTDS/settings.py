@@ -52,6 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "CopilotTDS.urls"
+ASGI_APPLICATION = 'CopilotTDS.asgi.application'
 
 LOGIN_URL = '/django-admin/login/'
 LOGOUT_REDIRECT_URL = '/django-admin/login/'
@@ -121,7 +122,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'traffic_distribution_system/static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
