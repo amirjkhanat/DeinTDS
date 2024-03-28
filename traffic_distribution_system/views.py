@@ -11,13 +11,38 @@ from django.http import JsonResponse
 from .models import Domain
 from django.views.decorators.csrf import csrf_exempt
 from asgiref.sync import async_to_sync, sync_to_async
+from django.core.exceptions import ObjectDoesNotExist
+import logging
 
 @csrf_exempt
 async def add_domain(request):
     if request.method == 'POST':
         domain_name = request.POST.get('name')
         domain = await sync_to_async(Domain.objects.create)(name=domain_name)
-        return JsonResponse({'id': domain.id, 'name': domain.name})
+        campaign = domain.campaign.name if domain.campaign else 'No campaign'
+        status = domain.status if domain.status else 'Not Connected'
+        check = '<button class="btn btn-primary check-btn" data-domain-id="' + str(
+            domain.id) + '">Check</button>',
+        edit = '<button class="btn btn-primary edit-btn" data-domain-id="' + str(
+            domain.id) + '" data-domain-name="' + domain.name + '">Edit</button>',
+        delete = '<button class="btn btn-danger delete-btn" data-domain-id="' + str(domain.id) + '">Delete</button>'
+
+        # Check if all fields are present and not None
+        if not all([domain_name, campaign, status, check, edit, delete]):
+            return JsonResponse({'error': 'One or more required fields are missing.'}, status=400)
+
+        return JsonResponse({
+            'data': [{
+                'id': domain.id,  # ID
+                'name': domain.name,  # Domain Name
+                'campaign': campaign,  # Campaign
+                'status': status,  # Status
+                'check': check,  # Check button
+                'edit': edit,  # Edit button
+                'delete': delete  # Delete button
+            }]
+        })
+
 @login_required
 def dashboard(request):
     campaigns = Campaign.objects.all()
@@ -86,12 +111,6 @@ def logout_view(request):
     return render(request, "logout.html", {})
 
 @csrf_exempt
-async def add_domain(request):
-    if request.method == 'POST':
-        domain_name = request.POST.get('name')
-        domain = await sync_to_async(Domain.objects.create)(name=domain_name)
-        return JsonResponse({'id': domain.id, 'name': domain.name})
-@csrf_exempt
 async def check_domain(request):
     if request.method == 'POST':
         domain_id = request.POST.get('id')
@@ -99,7 +118,7 @@ async def check_domain(request):
         try:
             ip = socket.gethostbyname(domain.name)
             server_ip = socket.gethostbyname(socket.gethostname())
-            if ip == server_ip:
+            if ip == server_ip or domain.name in ['localhost', '127.0.0.1']:
                 domain.status = 'Connected'
             else:
                 domain.status = 'Not Connected'
@@ -114,12 +133,19 @@ async def edit_domain(request):
         domain_id = request.POST.get('id')
         domain_name = request.POST.get('name')
         campaign_id = request.POST.get('campaign')
-        domain = await sync_to_async(Domain.objects.get)(id=domain_id)
-        campaign = await sync_to_async(Campaign.objects.get)(id=campaign_id)
+        try:
+            domain = await sync_to_async(Domain.objects.get)(id=domain_id)
+            campaign = None
+            if campaign_id:
+                campaign = await sync_to_async(Campaign.objects.get)(id=campaign_id)
+        except ObjectDoesNotExist:
+            logging.error('Domain or Campaign does not exist.')
+            return JsonResponse({'error': 'Domain or Campaign does not exist.'}, status=404)
+
         domain.name = domain_name
         domain.campaign = campaign
         await sync_to_async(domain.save)()
-        return JsonResponse({'id': domain.id, 'name': domain.name, 'campaign': campaign.id})
+        return JsonResponse({'id': domain.id, 'name': domain.name, 'campaign': campaign.id if campaign else None})
 
 @csrf_exempt
 async def delete_domain(request):
@@ -128,3 +154,10 @@ async def delete_domain(request):
         domain = await sync_to_async(Domain.objects.get)(id=domain_id)
         await sync_to_async(domain.delete)()
         return JsonResponse({'id': domain_id})
+
+@csrf_exempt
+async def get_domain(request):
+    if request.method == 'POST':
+        domain_id = request.POST.get('id')
+        domain = await sync_to_async(Domain.objects.get)(id=domain_id)
+        return JsonResponse({'id': domain.id, 'name': domain.name})

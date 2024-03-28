@@ -26,10 +26,10 @@ class Domain(models.Model):
     name = models.CharField(max_length=255)
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE, related_name='domains', null=True)
     STATUS_CHOICES = [
-        ('connected', 'Connected'),
-        ('not connected', 'Not Connected'),
+        ('Connected', 'Connected'),
+        ('Not Connected', 'Not Connected'),
     ]
-    status = models.CharField(max_length=13, choices=STATUS_CHOICES, default='not connected')
+    status = models.CharField(max_length=13, choices=STATUS_CHOICES, default='Not Connected')
 
 class Campaign(models.Model):
     name = models.CharField(max_length=255)
