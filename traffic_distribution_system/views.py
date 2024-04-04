@@ -11,13 +11,10 @@ from django.http import JsonResponse
 from .models import Domain
 from django.views.decorators.csrf import csrf_exempt
 from asgiref.sync import async_to_sync, sync_to_async
+import logging
 
-@csrf_exempt
-async def add_domain(request):
-    if request.method == 'POST':
-        domain_name = request.POST.get('name')
-        domain = await sync_to_async(Domain.objects.create)(name=domain_name)
-        return JsonResponse({'id': domain.id, 'name': domain.name})
+logger = logging.getLogger(__name__)
+
 @login_required
 def dashboard(request):
     campaigns = Campaign.objects.all()
@@ -100,9 +97,9 @@ async def check_domain(request):
             ip = socket.gethostbyname(domain.name)
             server_ip = socket.gethostbyname(socket.gethostname())
             if ip == server_ip:
-                domain.status = 'Connected'
+                domain.status = 'connected'
             else:
-                domain.status = 'Not Connected'
+                domain.status = 'notconnected'
             await sync_to_async(domain.save)()
             return JsonResponse({'status': domain.status})
         except Exception as e:
@@ -111,15 +108,28 @@ async def check_domain(request):
 @csrf_exempt
 async def edit_domain(request):
     if request.method == 'POST':
-        domain_id = request.POST.get('id')
-        domain_name = request.POST.get('name')
-        campaign_id = request.POST.get('campaign')
-        domain = await sync_to_async(Domain.objects.get)(id=domain_id)
-        campaign = await sync_to_async(Campaign.objects.get)(id=campaign_id)
-        domain.name = domain_name
-        domain.campaign = campaign
-        await sync_to_async(domain.save)()
-        return JsonResponse({'id': domain.id, 'name': domain.name, 'campaign': campaign.id})
+        try:
+            domain_id = request.POST.get('id')
+            domain_name = request.POST.get('name')
+            campaign_id = request.POST.get('campaign')
+
+            domain = await sync_to_async(Domain.objects.get)(id=domain_id)
+
+            campaign = None
+            if campaign_id:
+                campaign = await sync_to_async(Campaign.objects.get)(id=campaign_id)
+
+            domain.name = domain_name
+            domain.campaign = campaign
+
+            await sync_to_async(domain.save)()
+
+            logger.info(f'Domain {domain.id} updated successfully')
+
+            return JsonResponse({'id': domain.id, 'name': domain.name, 'campaign': campaign.id if campaign else None})
+        except Exception as e:
+            logger.error(f'Error updating domain: {str(e)}')
+            return JsonResponse({'error': str(e)})
 
 @csrf_exempt
 async def delete_domain(request):

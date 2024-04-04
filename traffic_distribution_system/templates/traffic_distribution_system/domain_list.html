@@ -1,7 +1,7 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between" style="margin: 20px">
     <h1>Domains</h1>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDomainModal">
       Add Domain
@@ -81,7 +81,15 @@
                         {% endif %}
                             No campaign
                     </td>
-                    <td class="{{ domain.status }}">{{ domain.status }}</td>
+                    <td class="{{ domain.status }}">
+                    {% if domain.status == "notconnected" %}
+                        Not connected
+                    {% elif domain.status == "connected" %}
+                        Connected
+                    {% elif domain.status == "error" %}
+                        Error
+                    {% endif %}
+                    </td>
                     <td><button class="btn btn-primary check-btn" data-domain-id="{{ domain.id }}">Check</button></td>
                     <td><button class="btn btn-primary edit-btn" data-domain-id="{{ domain.id }}" data-domain-name="{{ domain.name }}" data-domain-campaign="{{ domain.campaign.id }}">Edit</button></td>
                     <td><button class="btn btn-danger delete-btn" data-domain-id="{{ domain.id }}">Delete</button></td>

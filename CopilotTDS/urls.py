@@ -2,6 +2,8 @@
 from django.contrib import admin
 from django.urls import path
 from traffic_distribution_system import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -9,7 +11,7 @@ urlpatterns = [
     path('admin/profile/', views.profile, name='profile'),
     path('admin/logout/', views.logout_view, name='logout'),
     path('admin/domain/', views.domain_list, name='domain_list'),
-path('admin/domain/add/', views.add_domain, name='add_domain'),
+    path('admin/domain/add/', views.add_domain, name='add_domain'),
     path('admin/campaigns/', views.campaign_list, name='campaign_list'),
     path('admin/partner_programs/', views.partner_program_list, name='partner_program_list'),
     path('admin/traffic_sources/', views.traffic_source_list, name='traffic_source_list'),
@@ -21,4 +23,4 @@ path('admin/domain/add/', views.add_domain, name='add_domain'),
     path('admin/domain/check/', views.check_domain, name='check_domain'),
     path('admin/domain/edit/', views.edit_domain, name='edit_domain'),
     path('admin/domain/delete/', views.delete_domain, name='delete_domain'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
