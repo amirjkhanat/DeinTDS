@@ -1,0 +1,151 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between" style="margin: 20px">
+    <h1>Traffic Sources</h1>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTrafficSourceModal">
+      Add Traffic Source
+    </button>
+</div>
+
+<!-- Add Traffic Source Modal -->
+<div class="modal fade" id="addTrafficSourceModal" tabindex="-1" aria-labelledby="addTrafficSourceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTrafficSourceModalLabel">Add Traffic Source</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addTrafficSourceForm">
+          <div class="mb-3">
+            <label for="trafficSourceName" class="form-label">Traffic Source Name</label>
+            <input type="text" class="form-control" id="trafficSourceName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Traffic Source Modal -->
+<div class="modal fade" id="editTrafficSourceModal" tabindex="-1" aria-labelledby="editTrafficSourceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTrafficSourceModalLabel">Edit Traffic Source</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editTrafficSourceForm">
+          <div class="mb-3">
+            <label for="editTrafficSourceName" class="form-label">Traffic Source Name</label>
+            <input type="text" class="form-control" id="editTrafficSourceName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if traffic_sources %}
+    <table id="trafficSourceTable" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Traffic Source Name</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for traffic_source in traffic_sources %}
+                <tr>
+                    <td>{{ traffic_source.name }}</td>
+                    <td><button class="btn btn-primary edit-btn" data-traffic-source-id="{{ traffic_source.id }}" data-traffic-source-name="{{ traffic_source.name }}">Edit</button></td>
+                    <td><button class="btn btn-danger delete-btn" data-traffic-source-id="{{ traffic_source.id }}">Delete</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Traffic Sources is empty</p>
+{% endif %}
+<script>
+$(document).ready(function() {
+    $('#trafficSourceTable').DataTable({
+        "order": [[ 0, "asc" ]] // сортировка по алфавиту в первой колонке
+    });
+
+    document.getElementById('addTrafficSourceForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var trafficSourceName = document.getElementById('trafficSourceName').value;
+
+      fetch('{% url 'add_traffic_source' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'name=' + encodeURIComponent(trafficSourceName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список источников трафика на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    document.getElementById('editTrafficSourceForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var trafficSourceId = document.getElementById('editTrafficSourceForm').dataset.trafficSourceId;
+      var trafficSourceName = document.getElementById('editTrafficSourceName').value;
+
+      fetch('{% url 'edit_traffic_source' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(trafficSourceId) + '&name=' + encodeURIComponent(trafficSourceName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список источников трафика на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    $('.edit-btn').click(function() {
+      var trafficSourceId = $(this).data('traffic-source-id');
+      var trafficSourceName = $(this).data('traffic-source-name');
+
+      document.getElementById('editTrafficSourceForm').dataset.trafficSourceId = trafficSourceId;
+      document.getElementById('editTrafficSourceName').value = trafficSourceName;
+
+      $('#editTrafficSourceModal').modal('show');
+    });
+
+    $('.delete-btn').click(function() {
+      var trafficSourceId = $(this).data('traffic-source-id');
+
+      fetch('{% url 'delete_traffic_source' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(trafficSourceId)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список источников трафика на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+});
+</script>
+{% endblock %}

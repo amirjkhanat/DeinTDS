@@ -1,0 +1,22 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Profile</h1>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<form method="POST">
+    {% csrf_token %}
+    <div class="theme-selection">
+        <label for="light-theme">
+            <input type="radio" id="light-theme" name="theme" value="light" {% if theme == 'light' %}checked{% endif %}>
+            <img src="{% static 'img/light_theme.png' %}" alt="Light Theme">
+        </label>
+        <label for="dark-theme">
+            <input type="radio" id="dark-theme" name="theme" value="dark" {% if theme == 'dark' %}checked{% endif %}>
+            <img src="{% static 'img/dark_theme.png' %}" alt="Dark Theme">
+        </label>
+    </div>
+    <button type="submit">Change Theme</button>
+</form>
+{% endblock %}

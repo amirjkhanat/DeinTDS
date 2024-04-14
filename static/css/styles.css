@@ -1,0 +1,67 @@
+.connected {
+    color: green;
+}
+
+.notconnected {
+    color: red;
+}
+
+.custom-input {
+  width: 100%; /* Full width */
+  padding: 12px; /* Some padding */
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+.theme-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.theme-selection label {
+    cursor: pointer;
+}
+
+.theme-selection img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.theme-selection input[type="radio"]:checked + img {
+    border-color: #007bff;
+}
+
+.theme-selection img {
+    width: 50px; /* Уменьшаем размер иконок */
+    height: 50px; /* Уменьшаем размер иконок */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.theme-selection input[type="radio"] {
+    display: none; /* Скрываем радиокнопки */
+}
+
+.theme-selection input[type="radio"]:checked + img {
+    border-color: #007bff;
+}
+
+button[type="submit"] {
+    background-color: #007bff; /* Изменяем цвет фона кнопки */
+    color: #fff; /* Изменяем цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    padding: 10px 20px; /* Добавляем отступы */
+    border-radius: 5px; /* Делаем углы кнопки скругленными */
+    cursor: pointer; /* Добавляем эффект наведения */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Изменяем цвет фона кнопки при наведении */
+}

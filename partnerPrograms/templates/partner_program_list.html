@@ -1,0 +1,151 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between" style="margin: 20px">
+    <h1>Partner Programs</h1>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPartnerProgramModal">
+      Add Partner Program
+    </button>
+</div>
+
+<!-- Add Partner Program Modal -->
+<div class="modal fade" id="addPartnerProgramModal" tabindex="-1" aria-labelledby="addPartnerProgramModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPartnerProgramModalLabel">Add Partner Program</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addPartnerProgramForm">
+          <div class="mb-3">
+            <label for="partnerProgramName" class="form-label">Partner Program Name</label>
+            <input type="text" class="form-control" id="partnerProgramName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Partner Program Modal -->
+<div class="modal fade" id="editPartnerProgramModal" tabindex="-1" aria-labelledby="editPartnerProgramModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPartnerProgramModalLabel">Edit Partner Program</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editPartnerProgramForm">
+          <div class="mb-3">
+            <label for="editPartnerProgramName" class="form-label">Partner Program Name</label>
+            <input type="text" class="form-control" id="editPartnerProgramName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if partner_programs %}
+    <table id="partnerProgramTable" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Partner Program Name</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for partner_program in partner_programs %}
+                <tr>
+                    <td>{{ partner_program.name }}</td>
+                    <td><button class="btn btn-primary edit-btn" data-partner-program-id="{{ partner_program.id }}" data-partner-program-name="{{ partner_program.name }}">Edit</button></td>
+                    <td><button class="btn btn-danger delete-btn" data-partner-program-id="{{ partner_program.id }}">Delete</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Partner Programs is empty</p>
+{% endif %}
+<script>
+$(document).ready(function() {
+    $('#partnerProgramTable').DataTable({
+        "order": [[ 0, "asc" ]] // сортировка по алфавиту в первой колонке
+    });
+
+    document.getElementById('addPartnerProgramForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var partnerProgramName = document.getElementById('partnerProgramName').value;
+
+      fetch('{% url 'add_partner_program' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'name=' + encodeURIComponent(partnerProgramName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список партнерских программ на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    document.getElementById('editPartnerProgramForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var partnerProgramId = document.getElementById('editPartnerProgramForm').dataset.partnerProgramId;
+      var partnerProgramName = document.getElementById('editPartnerProgramName').value;
+
+      fetch('{% url 'edit_partner_program' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(partnerProgramId) + '&name=' + encodeURIComponent(partnerProgramName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список партнерских программ на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    $('.edit-btn').click(function() {
+      var partnerProgramId = $(this).data('partner-program-id');
+      var partnerProgramName = $(this).data('partner-program-name');
+
+      document.getElementById('editPartnerProgramForm').dataset.partnerProgramId = partnerProgramId;
+      document.getElementById('editPartnerProgramName').value = partnerProgramName;
+
+      $('#editPartnerProgramModal').modal('show');
+    });
+
+    $('.delete-btn').click(function() {
+      var partnerProgramId = $(this).data('partner-program-id');
+
+      fetch('{% url 'delete_partner_program' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(partnerProgramId)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список партнерских программ на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+});
+</script>
+{% endblock %}

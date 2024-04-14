@@ -1,0 +1,191 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between" style="margin: 20px">
+    <h1>Offers</h1>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfferModal">
+      Add Offer
+    </button>
+</div>
+
+<!-- Add Offer Modal -->
+<div class="modal fade" id="addOfferModal" tabindex="-1" aria-labelledby="addOfferModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addOfferModalLabel">Add Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addOfferForm" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.as_p }}  <!-- render the form fields here -->
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Offer Modal -->
+<div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editOfferModalLabel">Edit Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editOfferForm" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <!-- The form fields will be filled by JavaScript -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if offers %}
+    <table id="offerTable" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Offer Name</th>
+                <th>Offer Type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for offer in offers %}
+                <tr>
+                    <td>{{ offer.name }}</td>
+                    <td>{{ offer.get_offer_type_display }}</td>
+                    <td><a href="{% url 'edit_offer' offer.id %}" class="btn btn-primary">Edit</a></td>
+                    <td><button class="btn btn-danger delete-btn" data-offer-id="{{ offer.id }}">Delete</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+{% endif %}
+        <p>Offers is empty</p>
+<script>
+
+$(document).ready(function() {
+    // Сначала скрываем все необходимые поля
+    $('#id_redirect_url').parent().hide();
+    $('#id_preload_url').parent().hide();
+    $('#id_action_type').parent().hide();
+    $('#id_action_html').parent().hide();
+    $('#id_campaign').parent().hide();  // скрываем поле 'campaign'
+
+    // Показываем поле 'html_file' по умолчанию
+    $('#id_html_file').parent().show();
+
+    // Обработчик события изменения для 'offer_type'
+    $('select[name="offer_type"]').on('change', function() {
+        // Скрываем все поля
+        $('#id_html_file').parent().hide();
+        $('#id_redirect_url').parent().hide();
+        $('#id_preload_url').parent().hide();
+        $('#id_action_type').parent().hide();
+        $('#id_action_html').parent().hide();
+        $('#id_campaign').parent().hide();  // скрываем поле 'campaign'
+
+        // Показываем соответствующее поле в зависимости от выбранного типа предложения
+        if (this.value == 'html_file') {
+            $('#id_html_file').parent().show();
+        } else if (this.value == 'redirect') {
+            $('#id_redirect_url').parent().show();
+        } else if (this.value == 'preload') {
+            $('#id_preload_url').parent().show();
+        } else if (this.value == 'action') {
+            $('#id_action_type').parent().show();
+            // Trigger the change event for 'action_type'
+            $('#id_action_type').trigger('change');
+        } else if (this.value == 'redirect_to_campaign') {
+            $('#id_campaign').parent().show();  // показываем поле 'campaign'
+        }
+    });
+
+    // Обработчик события изменения поля 'action_type'
+    $('#id_action_type').on('change', function() {
+        if (this.value == 'redirect') {
+            $('#id_campaign').parent().show();
+        } else {
+            $('#id_campaign').parent().hide();
+        }
+    });
+
+    // Обработчик события изменения поля 'action_type'
+    $('#id_action_type').on('change', function() {
+        if (this.value == 'html') {
+            $('#id_action_html').parent().show();
+        } else {
+            $('#id_action_html').parent().hide();
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#offerTable').DataTable({
+        "order": [[ 0, "asc" ]] // сортировка по алфавиту в первой колонке
+    });
+
+    document.getElementById('addOfferForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var offerName = document.getElementById('offerName').value;
+
+      fetch('{% url 'add_offer' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'name=' + encodeURIComponent(offerName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список предложений на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    $('.delete-btn').click(function() {
+      var offerId = $(this).data('offer-id');
+
+      fetch('{% url 'delete_offer' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(offerId)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список предложений на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+});
+
+document.getElementById('addOfferForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  var formData = new FormData(this);
+
+  fetch('{% url 'add_offer' %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    location.reload();
+  });
+});
+</script>
+{% endblock %}

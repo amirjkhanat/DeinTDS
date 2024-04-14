@@ -1,0 +1,202 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between" style="margin: 20px">
+    <h1>Domains</h1>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDomainModal">
+      Add Domain
+    </button>
+</div>
+
+<!-- Add Domain Modal -->
+<div class="modal fade" id="addDomainModal" tabindex="-1" aria-labelledby="addDomainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addDomainModalLabel">Add Domain</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addDomainForm">
+          <div class="mb-3">
+            <label for="domainName" class="form-label">Domain Name</label>
+            <input type="text" class="form-control" id="domainName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Domain Modal -->
+<div class="modal fade" id="editDomainModal" tabindex="-1" aria-labelledby="editDomainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editDomainModalLabel">Edit Domain</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editDomainForm">
+          <div class="mb-3">
+            <label for="editDomainName" class="form-label">Domain Name</label>
+            <input type="text" class="form-control" id="editDomainName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editDomainCampaign" class="form-label">Campaign</label>
+            <select class="form-control" id="editDomainCampaign">
+              {% for campaign in campaigns %}
+                <option value="{{ campaign.id }}">{{ campaign.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if domains %}
+    <table id="domainTable" class="display" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Domain Name</th>
+                <th>Campaign</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for domain in domains %}
+                <tr>
+                    <td>{{ domain.name }}</td>
+                    <td>
+                        {% if domain.campaign %}
+                            {{ domain.campaign.name }}
+                        {% else %}
+                        {% endif %}
+                            No campaign
+                    </td>
+                    <td class="{{ domain.status }}">
+                    {% if domain.status == "notconnected" %}
+                        Not connected
+                    {% elif domain.status == "connected" %}
+                        Connected
+                    {% elif domain.status == "error" %}
+                        Error
+                    {% endif %}
+                    </td>
+                    <td><button class="btn btn-primary check-btn" data-domain-id="{{ domain.id }}">Check</button></td>
+                    <td><button class="btn btn-primary edit-btn" data-domain-id="{{ domain.id }}" data-domain-name="{{ domain.name }}" data-domain-campaign="{{ domain.campaign.id }}">Edit</button></td>
+                    <td><button class="btn btn-danger delete-btn" data-domain-id="{{ domain.id }}">Delete</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Domains is empty</p>
+{% endif %}
+<script>
+let prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+let html = document.querySelector('html');
+
+html.classList.add(prefers);
+html.setAttribute('data-bs-theme', prefers);
+$(document).ready(function() {
+    $('#domainTable').DataTable({
+        "order": [[ 0, "asc" ]] // сортировка по алфавиту в первой колонке
+    });
+
+    document.getElementById('addDomainForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var domainName = document.getElementById('domainName').value;
+
+      fetch('{% url 'add_domain' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'name=' + encodeURIComponent(domainName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список доменов на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    document.getElementById('editDomainForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var domainId = document.getElementById('editDomainForm').dataset.domainId;
+      var domainName = document.getElementById('editDomainName').value;
+
+      fetch('{% url 'edit_domain' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(domainId) + '&name=' + encodeURIComponent(domainName)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список доменов на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    $('.check-btn').click(function() {
+      var domainId = $(this).data('domain-id');
+
+      fetch('{% url 'check_domain' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(domainId)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить статус домена на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+
+    $('.edit-btn').click(function() {
+      var domainId = $(this).data('domain-id');
+      var domainName = $(this).data('domain-name');
+
+      document.getElementById('editDomainForm').dataset.domainId = domainId;
+      document.getElementById('editDomainName').value = domainName;
+
+      $('#editDomainModal').modal('show');
+    });
+
+    $('.delete-btn').click(function() {
+      var domainId = $(this).data('domain-id');
+
+      fetch('{% url 'delete_domain' %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'id=' + encodeURIComponent(domainId)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Здесь вы можете обновить список доменов на странице или просто перезагрузить страницу
+        location.reload();
+      });
+    });
+});
+</script>
+{% endblock %}
