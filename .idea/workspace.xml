@@ -4,60 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="038ff29a-ab32-4509-87ce-1c1d38d09cfe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/core.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/campaigns/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/campaigns/migrations/0002_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/campaigns/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/campaigns/templates/campaign_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/campaigns/templates/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/wsgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domains/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domains/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domains/templates/domain_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domains/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/filters/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/filters/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/filters/templates/filter_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/landings/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/landings/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/offers/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/offers/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/offers/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/offers/templates/offer_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/offers/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/partnerPrograms/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/partnerPrograms/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/partnerPrograms/templates/partner_program_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/partnerPrograms/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/dark_theme.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/light_theme.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/staticfiles/img/dark_theme.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/staticfiles/img/light_theme.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/streams/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/streams/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/streams/templates/stream_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base_generic.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/logout.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trafficSources/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trafficSources/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trafficSources/templates/traffic_source_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trafficSources/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users/context_processors.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users/templates/user_list.html" afterDir="false" />
+    <list default="true" id="038ff29a-ab32-4509-87ce-1c1d38d09cfe" name="Changes" comment="offers in work">
+      <change afterPath="$PROJECT_DIR$/filters/migrations/0002_alter_filter_type.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reports/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domains/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/domains/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/filters/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/filters/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/offers/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/offers/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/offers/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/offers/templates/offer_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/offers/templates/offer_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/offers/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/offers/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/offers/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/offers/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partnerPrograms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/partnerPrograms/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streams/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/streams/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trafficSources/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/trafficSources/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +70,10 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+    ]
   }
 }</component>
   <component name="RunManager" selected="Python.daphne">
@@ -196,7 +170,75 @@
       <workItem from="1713082028333" duration="3505000" />
       <workItem from="1713101784296" duration="406000" />
       <workItem from="1713102219313" duration="15947000" />
+      <workItem from="1713122178183" duration="248000" />
+      <workItem from="1713165120948" duration="599000" />
+      <workItem from="1713171890221" duration="10609000" />
+      <workItem from="1713200364555" duration="13000" />
+      <workItem from="1713200455903" duration="7847000" />
+      <workItem from="1713272768599" duration="4000" />
+      <workItem from="1713272784981" duration="2030000" />
+      <workItem from="1713283520230" duration="6822000" />
+      <workItem from="1713293792034" duration="3420000" />
+      <workItem from="1713325016168" duration="3083000" />
+      <workItem from="1713335859018" duration="10908000" />
     </task>
+    <task id="LOCAL-00001" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122243689</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122243689</updated>
+    </task>
+    <task id="LOCAL-00002" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122290382</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122290382</updated>
+    </task>
+    <task id="LOCAL-00003" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122303098</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122303098</updated>
+    </task>
+    <task id="LOCAL-00004" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122308268</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122308268</updated>
+    </task>
+    <task id="LOCAL-00005" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122315619</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122315619</updated>
+    </task>
+    <task id="LOCAL-00006" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122322821</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122322821</updated>
+    </task>
+    <task id="LOCAL-00007" summary="offers in work">
+      <option name="closed" value="true" />
+      <created>1713122334031</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1713122334031</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,8 +272,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="offers in work" />
+    <option name="LAST_COMMIT_MESSAGE" value="offers in work" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/core$daphne.coverage" NAME="daphne Coverage Results" MODIFIED="1713118772776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/core$daphne.coverage" NAME="daphne Coverage Results" MODIFIED="1713361274206" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

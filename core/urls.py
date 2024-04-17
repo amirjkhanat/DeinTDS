@@ -28,6 +28,7 @@ from streams import views as streams
 from django.conf.urls.static import static
 from django.conf import settings
 from users.views import profile_view
+from reports import views as reports
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -35,8 +36,9 @@ urlpatterns = [
     path('admin/', campaigns.dashboard, name='dashboard'),
     path('admin/profile/', profile_view, name='profile'),
     path('admin/logout/', logout_view, name='logout'),
-    path('partnerprograms/', include('partnerPrograms.urls')),
+    path('admin/partnerprograms/', include('partnerPrograms.urls')),
     path('admin/traffic-source/', include('trafficSources.urls')),
     path('admin/domains/', include('domains.urls')),
     path('admin/offers/', include('offers.urls')),
+    path('<str:unique_id>/', reports.register_click, name='register_click'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

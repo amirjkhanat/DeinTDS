@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "filters.apps.FiltersConfig",
     "streams.apps.StreamsConfig",
     "domains.apps.DomainsConfig",
+    "reports.apps.ReportsConfig",
 ]
 
 MIDDLEWARE = [

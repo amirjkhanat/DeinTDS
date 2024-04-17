@@ -38,7 +38,53 @@
       <div class="modal-body">
         <form id="editOfferForm" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
-          <!-- The form fields will be filled by JavaScript -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name">
+            </div>
+            <div class="mb-3">
+                <label for="offer_type" class="form-label">Offer Type</label>
+                <select class="form-control" id="offer_type" name="offer_type" autocomplete="off">
+                    <option value="html_file">HTML File</option>
+                    <option value="redirect">Redirect</option>
+                    <option value="preload">Preload</option>
+                    <option value="action">Action</option>
+                </select>
+            </div>
+            <!-- Add more fields here as needed -->
+            <div class="mb-3" id="html_file_field">
+                <label for="html_file" class="form-label">HTML File</label>
+                <input type="file" class="form-control" id="html_file" name="html_file">
+            </div>
+            <div class="mb-3" id="redirect_url_field">
+                <label for="redirect_url" class="form-label">Redirect URL</label>
+                <input type="text" class="form-control" id="redirect_url" name="redirect_url">
+            </div>
+            <div class="mb-3" id="preload_url_field">
+                <label for="preload_url" class="form-label">Preload URL</label>
+                <input type="text" class="form-control" id="preload_url" name="preload_url">
+            </div>
+            <div class="mb-3" id="action_type_field">
+                <label for="action_type" class="form-label">Action Type</label>
+                <select class="form-control" id="action_type" name="action_type">
+                    <option value="404">404 Not Found</option>
+                    <option value="redirect">Redirect to another campaign</option>
+                    <option value="html">Show as HTML</option>
+                </select>
+            </div>
+            <div class="mb-3" id="action_html_field">
+                <label for="action_html" class="form-label">Action HTML</label>
+                <textarea class="form-control" id="action_html" name="action_html"></textarea>
+            </div>
+            <div class="mb-3" id="campaign_field">
+                <label for="campaign" class="form-label">Campaign</label>
+                <select class="form-control" id="campaign" name="campaign">
+                    {% for campaign in campaigns %}
+                        <option value="{{ campaign.id }}">{{ campaign.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save changes</button>
         </form>
       </div>
     </div>
@@ -47,83 +93,152 @@
 
 {% if offers %}
     <table id="offerTable" class="display" style="width: 100%">
-        <thead>
-            <tr>
-                <th>Offer Name</th>
-                <th>Offer Type</th>
-                <th></th>
+    <thead>
+        <tr>
+            <th>Offer Name</th>
+            <th>Offer Type</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for offer in offers %}
+            <tr data-offer-id="{{ offer.id }}">
+                <td>{{ offer.name }}</td>
+                <td>{{ offer.get_offer_type_display }}</td>
+                <td><button class="btn btn-primary edit-btn" data-offer-id="{{ offer.id }}" data-offer-type-id="{{ offer.offer_type }}">Edit</button></td>
+                <td><button class="btn btn-danger delete-btn" data-offer-id="{{ offer.id }}">Delete</button></td>
             </tr>
-        </thead>
-        <tbody>
-            {% for offer in offers %}
-                <tr>
-                    <td>{{ offer.name }}</td>
-                    <td>{{ offer.get_offer_type_display }}</td>
-                    <td><a href="{% url 'edit_offer' offer.id %}" class="btn btn-primary">Edit</a></td>
-                    <td><button class="btn btn-danger delete-btn" data-offer-id="{{ offer.id }}">Delete</button></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
     {% else %}
 {% endif %}
         <p>Offers is empty</p>
 <script>
 
+
+
+$('#editOfferForm').submit(function(event) {
+    event.preventDefault();
+
+    var offerId = $(this).data('offer-id');  // Get the offerId from the form data
+    var newName = $(this).find('input[name="name"]').val();
+    var newType = $(this).find('select[name="offer_type"]').val();
+    var newHtmlFile = $(this).find('input[name="html_file"]').val();
+    var newRedirectUrl = $(this).find('input[name="redirect_url"]').val();
+    var newPreloadUrl = $(this).find('input[name="preload_url"]').val();  // Get the new preload URL
+    var newActionType = $(this).find('select[name="action_type"]').val();
+    var newActionHtml = $(this).find('textarea[name="action_html"]').val();
+    var newCampaign = $(this).find('select[name="campaign"]').val();
+
+    $.ajax({
+        url: 'edit/' + offerId + '/',
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        data: {
+            'name': newName,
+            'offer_type': newType,
+            'html_file': newHtmlFile,
+            'redirect_url': newRedirectUrl,
+            'preload_url': newPreloadUrl,  // Include the new preload URL in the data
+            'action_type': newActionType,
+            'action_html': newActionHtml,
+            'campaign': newCampaign
+        },
+        success: function(data) {
+            var table = $('#offerTable').DataTable();
+            var row = table.row('[data-offer-id="' + offerId + '"]').node();
+            if (row) {
+                $(row).children('td').eq(0).text(newName);  // Update the first cell
+                $(row).children('td').eq(1).text(newType);  // Update the second cell
+                table.draw();
+            } else {
+                console.error('Row with offerId ' + offerId + ' not found');
+            }
+
+            $('#editOfferModal').modal('hide');
+        }
+    });
+});
+
+$('.edit-btn').click(function() {
+    var offerId = $(this).data('offer-id');
+
+    $.ajax({
+        url: 'get/' + offerId + '/',
+        type: 'GET',
+        success: function(data) {
+            // Fill the form fields with the current offer data
+            $('#editOfferForm').find('input[name="name"]').val(data.name);
+            $('#editOfferForm').find('select[name="offer_type"]').val(data.offer_type);
+            $('#editOfferForm').find('input[name="html_file"]').val(data.html_file);
+            $('#editOfferForm').find('input[name="redirect_url"]').val(data.redirect_url);
+            $('#editOfferForm').find('input[name="preload_url"]').val(data.preload_url);
+            $('#editOfferForm').find('select[name="action_type"]').val(data.action_type);
+            $('#editOfferForm').find('textarea[name="action_html"]').val(data.action_html);
+            $('#editOfferForm').find('select[name="campaign"]').val(data.campaign);
+
+            // Set the offerId in the form data
+            $('#editOfferForm').data('offer-id', offerId);
+
+            // Trigger the change event for 'offer_type'
+            $('#editOfferForm').find('select[name="offer_type"]').trigger('change');
+
+            // Open the modal
+            $('#editOfferModal').modal('show');
+        }
+    });
+});
+
 $(document).ready(function() {
     // Сначала скрываем все необходимые поля
-    $('#id_redirect_url').parent().hide();
-    $('#id_preload_url').parent().hide();
-    $('#id_action_type').parent().hide();
-    $('#id_action_html').parent().hide();
-    $('#id_campaign').parent().hide();  // скрываем поле 'campaign'
-
-    // Показываем поле 'html_file' по умолчанию
-    $('#id_html_file').parent().show();
+    $('#html_file_field').hide();
+    $('#redirect_url_field').hide();
+    $('#preload_url_field').hide();
+    $('#action_type_field').hide();
+    $('#action_html_field').hide();
+    $('#campaign_field').hide();  // скрываем поле 'campaign'
 
     // Обработчик события изменения для 'offer_type'
     $('select[name="offer_type"]').on('change', function() {
         // Скрываем все поля
-        $('#id_html_file').parent().hide();
-        $('#id_redirect_url').parent().hide();
-        $('#id_preload_url').parent().hide();
-        $('#id_action_type').parent().hide();
-        $('#id_action_html').parent().hide();
-        $('#id_campaign').parent().hide();  // скрываем поле 'campaign'
+        $('#html_file_field').hide();
+        $('#redirect_url_field').hide();
+        $('#preload_url_field').hide();
+        $('#action_type_field').hide();
+        $('#action_html_field').hide();
+        $('#campaign_field').hide();  // скрываем поле 'campaign'
 
         // Показываем соответствующее поле в зависимости от выбранного типа предложения
         if (this.value == 'html_file') {
-            $('#id_html_file').parent().show();
+            $('#html_file_field').show();
         } else if (this.value == 'redirect') {
-            $('#id_redirect_url').parent().show();
+            $('#redirect_url_field').show();
         } else if (this.value == 'preload') {
-            $('#id_preload_url').parent().show();
+            $('#preload_url_field').show();
         } else if (this.value == 'action') {
-            $('#id_action_type').parent().show();
+            $('#action_type_field').show();
             // Trigger the change event for 'action_type'
-            $('#id_action_type').trigger('change');
-        } else if (this.value == 'redirect_to_campaign') {
-            $('#id_campaign').parent().show();  // показываем поле 'campaign'
+            $('#action_type').trigger('change');
         }
-    });
+    }).trigger('change');  // Trigger the change event to set the initial state
 
     // Обработчик события изменения поля 'action_type'
-    $('#id_action_type').on('change', function() {
-        if (this.value == 'redirect') {
-            $('#id_campaign').parent().show();
-        } else {
-            $('#id_campaign').parent().hide();
-        }
-    });
+    $('#action_type').on('change', function() {
+        // Сначала скрываем все поля
+        $('#action_html_field').hide();
+        $('#campaign_field').hide();  // скрываем поле 'campaign'
 
-    // Обработчик события изменения поля 'action_type'
-    $('#id_action_type').on('change', function() {
+        // Затем показываем соответствующее поле в зависимости от выбранного типа действия
         if (this.value == 'html') {
-            $('#id_action_html').parent().show();
-        } else {
-            $('#id_action_html').parent().hide();
+            $('#action_html_field').show();
+        } else if (this.value == 'redirect') {
+            $('#campaign_field').show();  // показываем поле 'campaign'
         }
-    });
+    }).trigger('change');  // Trigger the change event to set the initial state
 });
 
 $(document).ready(function() {

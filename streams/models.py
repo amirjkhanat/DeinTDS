@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 class Stream(models.Model):
     STREAM_TYPES = (
         ('direct_url', 'Direct URL'),
+
         ('action', 'Action'),
     )
 
