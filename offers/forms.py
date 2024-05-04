@@ -2,7 +2,6 @@ from django import forms
 from .models import Offer, PartnerProgram
 from campaigns.models import Campaign
 
-
 class OfferForm(forms.ModelForm):
     partner_program = forms.ModelChoiceField(queryset=PartnerProgram.objects.all(), widget=forms.Select(attrs={'class': 'custom-input'}))
 

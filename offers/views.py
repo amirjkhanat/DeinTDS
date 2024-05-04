@@ -8,15 +8,16 @@ from asgiref.sync import sync_to_async
 import logging
 from django.shortcuts import get_object_or_404
 from django.core.files.storage import default_storage
+from django.http import HttpResponse
 
 # Настройка логирования
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
+
 @login_required
 def offer_list(request):
-    offers = Offer.objects.all()
-    form = OfferForm()  # create an instance of the form
-    return render(request, 'offer_list.html', {'offers': offers, 'form': form})
+    offers = Offer.objects.all()  # get all offers
+    return render(request, 'offer_list.html', {'offers': offers})
 
 @login_required
 def get_offer(request, offer_id):
@@ -33,23 +34,41 @@ def get_offer(request, offer_id):
     }
     return JsonResponse(data)
 
+from django.template.loader import render_to_string
+
+from django.http import JsonResponse
+from asgiref.sync import sync_to_async
+from django.urls import reverse
+from .forms import OfferForm
+import logging
+
+logger = logging.getLogger(__name__)
+
 async def add_offer(request):
-    logging.debug('add_offer called with method %s', request.method)
+    logger.info('add_offer called with method %s', request.method)
     if request.method == 'POST':
+        logger.info('Received form data: %s', request.POST)
         form = OfferForm(request.POST, request.FILES)
         is_valid = await sync_to_async(form.is_valid)()
         if is_valid:
             offer = await sync_to_async(form.save)()
-            logging.debug('Offer saved with id %s', offer.id)
-            return JsonResponse({'status': 'success', 'offer_id': offer.id})
+            logger.info('Offer saved with id %s', offer.id)
+            data = {
+                'id': offer.id,
+                'name': offer.name,
+                'offer_type': offer.get_offer_type_display(),
+                'edit_url': reverse('edit_offer', args=[offer.id]),
+                'delete_url': reverse('delete_offer', args=[offer.id]),
+                'status': 'success'  # добавляем поле 'status' со значением 'success'
+            }
+            return JsonResponse(data)
         else:
-            errors = form.errors  # No need to use sync_to_async here
-            logging.warning('Form is not valid: %s', errors)
-            logging.debug('Received form data: %s', request.POST)
+            errors = form.errors
+            logger.warning('Form is not valid: %s', errors)
             return JsonResponse({'status': 'error', 'errors': errors}, status=400)
     else:
-        logging.error('Invalid request method: %s', request.method)
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+        form = OfferForm()
+        return render(request, 'offer_list.html', {'form': form})
 
 def delete_offer(request):
     if request.method == 'POST':

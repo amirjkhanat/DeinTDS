@@ -40,5 +40,9 @@ urlpatterns = [
     path('admin/traffic-source/', include('trafficSources.urls')),
     path('admin/domains/', include('domains.urls')),
     path('admin/offers/', include('offers.urls')),
+    path('admin/offers', include('offers.urls')),
+    path('admin/partner-programs', include('partnerPrograms.urls')),
     path('<str:unique_id>/', reports.register_click, name='register_click'),
+    path('admin/api/', include('offers.api_urls')),
+    path('admin/api/', include('partnerPrograms.api_urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
