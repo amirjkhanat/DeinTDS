@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="038ff29a-ab32-4509-87ce-1c1d38d09cfe" name="Changes" comment="offers in work">
       <change afterPath="$PROJECT_DIR$/filters/migrations/0002_alter_filter_type.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/reports/__init__.py" afterDir="false" />
@@ -28,6 +29,10 @@
       <change beforePath="$PROJECT_DIR$/partnerPrograms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/partnerPrograms/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/streams/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/streams/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trafficSources/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/trafficSources/urls.py" afterDir="false" />
+=======
+    <list default="true" id="038ff29a-ab32-4509-87ce-1c1d38d09cfe" name="Changes" comment="aggrid integrating">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,6 +186,65 @@
       <workItem from="1713293792034" duration="3420000" />
       <workItem from="1713325016168" duration="3083000" />
       <workItem from="1713335859018" duration="10908000" />
+<<<<<<< Updated upstream
+=======
+      <workItem from="1713376934369" duration="1141000" />
+      <workItem from="1713425702153" duration="5354000" />
+      <workItem from="1713461329948" duration="8656000" />
+      <workItem from="1713497075781" duration="1889000" />
+      <workItem from="1713520861236" duration="16000" />
+      <workItem from="1713520887178" duration="9301000" />
+      <workItem from="1713540781666" duration="2257000" />
+      <workItem from="1713544311190" duration="5598000" />
+      <workItem from="1713580894652" duration="1301000" />
+      <workItem from="1713622272530" duration="262000" />
+      <workItem from="1713622592032" duration="7444000" />
+      <workItem from="1713640510484" duration="2974000" />
+      <workItem from="1713673392251" duration="7000" />
+      <workItem from="1713673456328" duration="1332000" />
+      <workItem from="1713689431489" duration="15000" />
+      <workItem from="1713689458088" duration="805000" />
+      <workItem from="1713698052978" duration="2511000" />
+      <workItem from="1713709228656" duration="1959000" />
+      <workItem from="1713760223667" duration="2356000" />
+      <workItem from="1713878453289" duration="661000" />
+      <workItem from="1713930821611" duration="2614000" />
+      <workItem from="1714157371405" duration="617000" />
+      <workItem from="1714189932998" duration="1921000" />
+      <workItem from="1714220326580" duration="6872000" />
+      <workItem from="1714313082920" duration="20000" />
+      <workItem from="1714313360360" duration="912000" />
+      <workItem from="1714314817797" duration="72000" />
+      <workItem from="1714318547321" duration="728000" />
+      <workItem from="1714319881598" duration="70000" />
+      <workItem from="1714320265740" duration="1868000" />
+      <workItem from="1714322346178" duration="883000" />
+      <workItem from="1714323426768" duration="4548000" />
+      <workItem from="1714360045667" duration="1968000" />
+      <workItem from="1714369536424" duration="318000" />
+      <workItem from="1714369867437" duration="28000" />
+      <workItem from="1714369930777" duration="5559000" />
+      <workItem from="1714400265417" duration="11464000" />
+      <workItem from="1714451262682" duration="20040000" />
+      <workItem from="1714544596786" duration="1509000" />
+      <workItem from="1714551551421" duration="2447000" />
+      <workItem from="1714554410422" duration="1438000" />
+      <workItem from="1714568431746" duration="90000" />
+      <workItem from="1714568638669" duration="38000" />
+      <workItem from="1714568690719" duration="6281000" />
+      <workItem from="1714576316551" duration="10304000" />
+      <workItem from="1714623108507" duration="598000" />
+      <workItem from="1714645047231" duration="388000" />
+      <workItem from="1714645446468" duration="1831000" />
+      <workItem from="1714680299993" duration="3834000" />
+      <workItem from="1714811172770" duration="20000" />
+      <workItem from="1714811303805" duration="49000" />
+      <workItem from="1714811486417" duration="307000" />
+      <workItem from="1714811851664" duration="113000" />
+      <workItem from="1714811986502" duration="11735000" />
+      <workItem from="1714838084097" duration="1000" />
+      <workItem from="1714838123290" duration="2019000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="offers in work">
       <option name="closed" value="true" />
@@ -238,7 +302,35 @@
       <option name="project" value="LOCAL" />
       <updated>1713122334031</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="8" />
+=======
+    <task id="LOCAL-00008" summary="offers without unique path for html pages. change to archive">
+      <option name="closed" value="true" />
+      <created>1713377156685</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1713377156685</updated>
+    </task>
+    <task id="LOCAL-00009" summary="offers without unique path for html pages. change to archive">
+      <option name="closed" value="true" />
+      <created>1713377504185</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1713377504186</updated>
+    </task>
+    <task id="LOCAL-00010" summary="aggrid integrating">
+      <option name="closed" value="true" />
+      <created>1714838712003</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1714838712003</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+>>>>>>> Stashed changes
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
